@@ -134,13 +134,27 @@
             cursor: pointer;
         }
 
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Tab Navigation */
         .tabs {
             display: flex;
             background: white;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            margin: 30px 0;
+            margin: 0 0 30px 0;
             overflow: hidden;
             flex-wrap: wrap;
         }
@@ -192,20 +206,6 @@
 
         .tab-content.active {
             display: block;
-        }
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
         }
 
         /* Card Styling */
@@ -1031,12 +1031,104 @@
         </div>
     </header>
 
+    <!-- Dashboard Section -->
+    <div class="container">
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-title">
+                    <h2><i class="fas fa-chart-line"></i> Productivity Score</h2>
+                </div>
+                <div class="productivity-score" id="productivityScore">84</div>
+                <div class="score-label">Your current productivity score</div>
+                
+                <div class="progress-section">
+                    <div class="progress-title">
+                        <span>Task Completion</span>
+                        <span>78%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-title">
+                        <span>Focus Time</span>
+                        <span>64%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 64%"></div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-title">
+                        <span>Goal Achievement</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+                
+                <div class="card-title" style="margin-top: 30px;">
+                    <h2><i class="fas fa-fire"></i> Streak Tracker</h2>
+                </div>
+                
+                <div class="streak-container">
+                    <div class="streak-day active">M</div>
+                    <div class="streak-day active">T</div>
+                    <div class="streak-day active">W</div>
+                    <div class="streak-day current">T</div>
+                    <div class="streak-day">F</div>
+                    <div class="streak-day">S</div>
+                    <div class="streak-day">S</div>
+                </div>
+                <p style="text-align: center; font-weight: 600; margin-top: 10px;">3-day streak! Keep going!</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <h2><i class="fas fa-bullseye"></i> Today's Focus</h2>
+                </div>
+                <div class="today-focus" id="todayFocus" style="font-size: 1.15rem; font-weight: 500; padding: 20px; background: #eef7ff; border-radius: var(--radius); margin-bottom: 20px;">
+                    Complete project proposal and prepare for client meeting
+                </div>
+                
+                <div class="card-title">
+                    <h2><i class="fas fa-tasks"></i> Priority Tasks</h2>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item">
+                        <input type="checkbox" class="task-check">
+                        <span class="task-text">Finalize project proposal document</span>
+                    </li>
+                    <li class="task-item">
+                        <input type="checkbox" class="task-check">
+                        <span class="task-text">Prepare presentation for client meeting</span>
+                    </li>
+                    <li class="task-item">
+                        <input type="checkbox" class="task-check" checked>
+                        <span class="task-text">Review team progress reports</span>
+                    </li>
+                    <li class="task-item">
+                        <input type="checkbox" class="task-check">
+                        <span class="task-text">Schedule next sprint planning</span>
+                    </li>
+                </ul>
+                
+                <div class="thank-you" id="thankYouMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Thank You for Your Support!</h3>
+                    <p>Premium features have been unlocked. Enjoy your enhanced productivity experience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Tab Navigation -->
     <div class="container">
         <div class="tabs" id="tabsContainer">
-            <div class="tab active" data-tab="dashboard">
-                <i class="fas fa-home"></i> Dashboard
-            </div>
             <div class="tab" data-tab="daily">
                 <i class="fas fa-calendar-day"></i> Daily Planner
             </div>
@@ -1045,101 +1137,6 @@
             </div>
             <div class="tab" data-tab="resume">
                 <i class="fas fa-file-alt"></i> Resume Builder
-            </div>
-        </div>
-
-        <!-- Dashboard Tab -->
-        <div class="tab-content active" id="dashboard-tab">
-            <div class="dashboard">
-                <div class="card">
-                    <div class="card-title">
-                        <h2><i class="fas fa-chart-line"></i> Productivity Score</h2>
-                    </div>
-                    <div class="productivity-score" id="productivityScore">84</div>
-                    <div class="score-label">Your current productivity score</div>
-                    
-                    <div class="progress-section">
-                        <div class="progress-title">
-                            <span>Task Completion</span>
-                            <span>78%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 78%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="progress-section">
-                        <div class="progress-title">
-                            <span>Focus Time</span>
-                            <span>64%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 64%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="progress-section">
-                        <div class="progress-title">
-                            <span>Goal Achievement</span>
-                            <span>92%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 92%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-title" style="margin-top: 30px;">
-                        <h2><i class="fas fa-fire"></i> Streak Tracker</h2>
-                    </div>
-                    
-                    <div class="streak-container">
-                        <div class="streak-day active">M</div>
-                        <div class="streak-day active">T</div>
-                        <div class="streak-day active">W</div>
-                        <div class="streak-day current">T</div>
-                        <div class="streak-day">F</div>
-                        <div class="streak-day">S</div>
-                        <div class="streak-day">S</div>
-                    </div>
-                    <p style="text-align: center; font-weight: 600; margin-top: 10px;">3-day streak! Keep going!</p>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">
-                        <h2><i class="fas fa-bullseye"></i> Today's Focus</h2>
-                    </div>
-                    <div class="today-focus" id="todayFocus" style="font-size: 1.15rem; font-weight: 500; padding: 20px; background: #eef7ff; border-radius: var(--radius); margin-bottom: 20px;">
-                        Complete project proposal and prepare for client meeting
-                    </div>
-                    
-                    <div class="card-title">
-                        <h2><i class="fas fa-tasks"></i> Priority Tasks</h2>
-                    </div>
-                    <ul class="task-list">
-                        <li class="task-item">
-                            <input type="checkbox" class="task-check">
-                            <span class="task-text">Finalize project proposal document</span>
-                        </li>
-                        <li class="task-item">
-                            <input type="checkbox" class="task-check">
-                            <span class="task-text">Prepare presentation for client meeting</span>
-                        </li>
-                        <li class="task-item">
-                            <input type="checkbox" class="task-check" checked>
-                            <span class="task-text">Review team progress reports</span>
-                        </li>
-                        <li class="task-item">
-                            <input type="checkbox" class="task-check">
-                            <span class="task-text">Schedule next sprint planning</span>
-                        </li>
-                    </ul>
-                    
-                    <div class="thank-you" id="thankYouMessage">
-                        <i class="fas fa-check-circle"></i>
-                        <h3>Thank You for Your Support!</h3>
-                        <p>Premium features have been unlocked. Enjoy your enhanced productivity experience.</p>
-                    </div>
-                </div>
             </div>
         </div>
 
