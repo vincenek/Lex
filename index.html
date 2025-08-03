@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex - Professional Productivity Suite</title>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #ffd166;
+            --gray: #adb5bd;
+            --premium: #ffd700;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+            --surface: #ffffff;
+            --surface-alt: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e6e9f2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-badge {
+            background: linear-gradient(45deg, #ffd700, #ff9800);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .premium-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .premium-badge.locked {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--surface-alt);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-premium {
+            background: linear-gradient(45deg, var(--premium), #ff9800);
+            color: #000;
+        }
+
+        .btn-premium:hover {
+            background: linear-gradient(45deg, #ffcc00, #ff8c00);
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+        }
+
+        .task-list {
+            list-style: none;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding-right: 5px;
+        }
+
+        .task-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .task-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb {
+            background: #c5c5c5;
+            border-radius: 10px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--surface-alt);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            transition: var(--transition);
+            animation: fadeIn 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-item:hover {
+            background: #eef2ff;
+            transform: translateX(5px);
+        }
+
+        .task-item.completed {
+            background: #edf7ff;
+            border-left-color: var(--success);
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+
+        .task-check {
+            margin-right: 15px;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .task-actions button {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-actions button:hover {
+            background: rgba(247, 37, 133, 0.1);
+            color: var(--danger);
+        }
+
+        .premium-feature {
+            position: relative;
+        }
+
+        .premium-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 10;
+            border-radius: var(--radius);
+        }
+
+        .premium-overlay i {
+            font-size: 3.5rem;
+            color: var(--premium);
+            margin-bottom: 20px;
+            background: rgba(255, 215, 0, 0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-overlay h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .premium-overlay p {
+            margin-bottom: 25px;
+            color: #495057;
+            font-size: 1.1rem;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+
+        .support-dev {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .support-dev a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .support-dev a:hover {
+            text-decoration: underline;
+        }
+
+        .resume-preview {
+            background: var(--surface-alt);
+            border-radius: var(--radius);
+            padding: 25px;
+            min-height: 300px;
+            margin-top: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        .resume-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .resume-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .resume-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .resume-section {
+            margin-bottom: 25px;
+        }
+
+        .resume-section h3 {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            position: relative;
+            animation: modalFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            background: #f8f9fa;
+            color: var(--dark);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header i {
+            font-size: 3.5rem;
+            color: var(--premium);
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .premium-features {
+            list-style: none;
+            margin: 25px 0;
+        }
+
+        .premium-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.05rem;
+        }
+
+        .premium-features li:last-child {
+            border-bottom: none;
+        }
+
+        .premium-features i {
+            color: var(--success);
+            font-size: 1.4rem;
+            min-width: 30px;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            color: #495057;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .payment-info strong {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .thank-you {
+            text-align: center;
+            padding: 30px 20px;
+            background: #e8f5e9;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .thank-you i {
+            color: #4caf50;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .thank-you h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2e7d32;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            font-size: 0.95rem;
+            color: #6c757d;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+
+        .save-limit {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: var(--surface-alt);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .locked-feature {
+            opacity: 0.6;
+            position: relative;
+            filter: grayscale(50%);
+        }
+
+        .locked-feature::after {
+            content: "🔒 Premium";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--premium);
+            color: #000;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: var(--dark);
+            color: white;
+            border-radius: var(--radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            font-size: 1.5rem;
+        }
+
+        .toast.success {
+            background: #2e7d32;
+        }
+
+        .toast.error {
+            background: #c62828;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">Lx</div>
+                <div class="logo-text">Lex</div>
+            </div>
+            <div id="premiumBadge" class="premium-badge locked">
+                <i class="fas fa-crown"></i>
+                <span>Upgrade to Premium</span>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Daily Planner Section -->
+            <div class="card">
+                <div class="card-title">
+                    <h2><i class="fas fa-calendar-alt"></i> Daily Planner</h2>
+                </div>
+                <div class="form-group">
+                    <label for="dailyFocus"><i class="fas fa-bullseye"></i> Today's Focus</label>
+                    <input type="text" id="dailyFocus" placeholder="What's your main focus for today?">
+                </div>
+                <div class="form-group">
+                    <label for="dailyTasks"><i class="fas fa-tasks"></i> Key Tasks</label>
+                    <textarea id="dailyTasks" rows="4" placeholder="List your most important tasks..."></textarea>
+                </div>
+                <button id="saveDailyBtn" class="btn btn-block">
+                    <i class="fas fa-save"></i> Save Daily Plan
+                </button>
+            </div>
+
+            <!-- To-Do List Section -->
+            <div class="card">
+                <div class="card-title">
+                    <h2><i class="fas fa-list-check"></i> Task Manager</h2>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="taskInput" placeholder="Add a new task...">
+                    </div>
+                </div>
+                <button id="addTaskBtn" class="btn btn-block">
+                    <i class="fas fa-plus"></i> Add Task
+                </button>
+                
+                <ul id="taskList" class="task-list">
+                    <!-- Tasks will be added here dynamically -->
+                </ul>
+                
+                <div class="status-bar">
+                    <div><i class="fas fa-tasks"></i> Total tasks: <span id="taskCount">0</span></div>
+                    <div><i class="fas fa-lock"></i> Free limit: <span id="taskLimit" class="save-limit">5 tasks</span></div>
+                </div>
+            </div>
+
+            <!-- Resume Builder (Premium) -->
+            <div class="card premium-feature">
+                <div class="card-title">
+                    <h2><i class="fas fa-file-contract"></i> Resume Builder</h2>
+                    <i class="fas fa-crown"></i>
+                </div>
+                
+                <div class="premium-overlay">
+                    <i class="fas fa-lock"></i>
+                    <h3>Premium Feature</h3>
+                    <p>Upgrade to Premium to create professional resumes with multiple templates, PDF export, and AI-powered suggestions.</p>
+                    <button id="unlockResumeBtn" class="btn btn-premium">
+                        <i class="fas fa-unlock"></i> Unlock Premium Features
+                    </button>
+                    <div class="support-dev">
+                        Support continued development by upgrading to Premium
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="resumeName"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="resumeName" placeholder="Your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="resumeTitle"><i class="fas fa-briefcase"></i> Professional Title</label>
+                    <input type="text" id="resumeTitle" placeholder="e.g., Software Engineer">
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-paint-brush"></i>
+                        <h4>Professional Templates</h4>
+                        <p>10+ ATS-friendly designs</p>
+                    </div>
+                    <div class="feature-card locked-feature">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>PDF Export</h4>
+                        <p>Download as PDF</p>
+                    </div>
+                    <div class="feature-card locked-feature">
+                        <i class="fas fa-robot"></i>
+                        <h4>AI Optimization</h4>
+                        <p>Smart content suggestions</p>
+                    </div>
+                    <div class="feature-card locked-feature">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Cloud Sync</h4>
+                        <p>Access from any device</p>
+                    </div>
+                </div>
+                
+                <button id="generateResumeBtn" class="btn btn-premium btn-block">
+                    <i class="fas fa-magic"></i> Generate Professional Resume
+                </button>
+            </div>
+
+            <!-- Productivity Stats -->
+            <div class="card">
+                <div class="card-title">
+                    <h2><i class="fas fa-chart-line"></i> Your Progress</h2>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-check-circle"></i> Completed Tasks This Week</label>
+                    <div style="background: #e9ecef; height: 24px; border-radius: 12px; margin: 15px 0; overflow: hidden;">
+                        <div id="progressBar" style="background: linear-gradient(90deg, var(--success), #4cc9f0); width: 65%; height: 100%; border-radius: 12px; transition: width 0.5s ease;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1rem;">
+                        <span>0</span>
+                        <span><span id="completedTasks">5</span>/8 tasks</span>
+                        <span>10</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-fire"></i> Productivity Streak</label>
+                    <div style="display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap;">
+                        <div class="streak-day active">M</div>
+                        <div class="streak-day active">T</div>
+                        <div class="streak-day active">W</div>
+                        <div class="streak-day current">T</div>
+                        <div class="streak-day">F</div>
+                        <div class="streak-day">S</div>
+                        <div class="streak-day">S</div>
+                    </div>
+                    <p style="text-align: center; font-size: 1.05rem; font-weight: 500;">3-day streak! Keep going!</p>
+                </div>
+                
+                <div class="thank-you" id="thankYouMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Thank You for Your Support!</h3>
+                    <p>Premium features have been unlocked. Enjoy your enhanced productivity experience.</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Lex Productivity Suite &copy; 2023 | All data is stored locally in your browser for maximum privacy</p>
+            <p class="support-dev">Support ongoing development by <a href="#" id="footerUpgrade">upgrading to Premium</a></p>
+        </footer>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-crown"></i>
+                <h2>Unlock Premium Features</h2>
+                <p>Get lifetime access with a single payment</p>
+            </div>
+            
+            <ul class="premium-features">
+                <li><i class="fas fa-check-circle"></i> Unlimited task storage</li>
+                <li><i class="fas fa-check-circle"></i> Professional resume builder</li>
+                <li><i class="fas fa-check-circle"></i> PDF export for plans & resumes</li>
+                <li><i class="fas fa-check-circle"></i> AI-powered content suggestions</li>
+                <li><i class="fas fa-check-circle"></i> Priority feature requests</li>
+                <li><i class="fas fa-check-circle"></i> Early access to new features</li>
+            </ul>
+            
+            <div class="payment-info">
+                <p>One-time payment: <strong>$14.99</strong></p>
+                <p>Lifetime access to all current and future premium features</p>
+            </div>
+            
+            <div class="payment-form">
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                
+                <button id="payButton" class="btn btn-premium btn-block">
+                    <span id="payButtonText"><i class="fas fa-lock"></i> Unlock Premium for $14.99</span>
+                </button>
+                
+                <div class="support-dev">
+                    Your payment directly supports the continued development of Lex
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation completed successfully</span>
+    </div>
+
+    <script>
+        // Robust Application Structure
+        const LexApp = (() => {
+            // DOM Elements
+            const elements = {
+                premiumBadge: document.getElementById('premiumBadge'),
+                paymentModal: document.getElementById('paymentModal'),
+                closeModal: document.getElementById('closeModal'),
+                payButton: document.getElementById('payButton'),
+                unlockResumeBtn
