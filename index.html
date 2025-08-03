@@ -39,12 +39,14 @@
             padding: 0;
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            transition: transform 0.3s ease;
         }
 
         /* Header & Navigation */
@@ -132,6 +134,21 @@
             font-size: 1.5rem;
             color: var(--dark);
             cursor: pointer;
+            z-index: 101;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Tab Navigation */
@@ -921,6 +938,65 @@
             grid-column: span 2;
         }
 
+        /* Sidebar Mobile Menu */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding-top: 70px;
+            overflow-y: auto;
+        }
+
+        .mobile-sidebar.active {
+            right: 0;
+        }
+
+        .mobile-tab {
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid #eee;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .mobile-tab:hover {
+            background: #f5f7ff;
+            color: var(--primary);
+        }
+
+        .mobile-tab i {
+            width: 25px;
+            text-align: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 998;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .mobile-menu-btn {
@@ -929,26 +1005,6 @@
             
             .tabs {
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                box-shadow: var(--shadow);
-                z-index: 99;
-                flex-direction: column;
-                border-radius: 0 0 var(--radius) var(--radius);
-                margin-top: 0;
-            }
-            
-            .tabs.active {
-                display: flex;
-            }
-            
-            .tab {
-                padding: 14px 20px;
-                justify-content: flex-start;
-                border-bottom: 1px solid #eee;
             }
             
             .resume-form {
@@ -997,6 +1053,32 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-tab" data-tab="dashboard">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </div>
+        <div class="mobile-tab" data-tab="daily">
+            <i class="fas fa-calendar-day"></i>
+            <span>Daily Planner</span>
+        </div>
+        <div class="mobile-tab" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>Task Manager</span>
+        </div>
+        <div class="mobile-tab" data-tab="resume">
+            <i class="fas fa-file-alt"></i>
+            <span>Resume Builder</span>
+        </div>
+        <div class="mobile-tab" id="mobileUpgrade">
+            <i class="fas fa-crown"></i>
+            <span>Upgrade to Premium</span>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+
     <!-- Header -->
     <header>
         <div class="header-container">
@@ -1018,7 +1100,7 @@
         </div>
     </header>
 
-    <!-- Tab Navigation -->
+    <!-- Dashboard Section -->
     <div class="container">
         <div class="tabs" id="tabsContainer">
             <div class="tab active" data-tab="dashboard">
@@ -1430,9 +1512,14 @@
         
         // DOM Elements
         const elements = {
+            // Mobile Menu
+            mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+            mobileSidebar: document.getElementById('mobileSidebar'),
+            overlay: document.getElementById('overlay'),
+            mobileUpgrade: document.getElementById('mobileUpgrade'),
+            
             // Tabs
             tabsContainer: document.getElementById('tabsContainer'),
-            mobileMenuBtn: document.getElementById('mobileMenuBtn'),
             
             // Premium
             premiumBadge: document.getElementById('premiumBadge'),
@@ -1524,27 +1611,31 @@
             // Set today's date as default for due date
             const today = new Date().toISOString().split('T')[0];
             elements.taskDueDate.value = today;
-            
-            // Set default active tab
-            activateTab('dashboard');
         }
         
         // Set up event listeners
         function setupEventListeners() {
+            // Mobile Menu
+            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            elements.overlay.addEventListener('click', toggleMobileMenu);
+            
+            // Mobile Menu Tabs
+            document.querySelectorAll('.mobile-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    if(tabId) {
+                        activateTab(tabId);
+                        toggleMobileMenu();
+                    }
+                });
+            });
+            
             // Tab Navigation
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabId = tab.getAttribute('data-tab');
                     activateTab(tabId);
-                    
-                    // Close mobile menu if open
-                    elements.tabsContainer.classList.remove('active');
                 });
-            });
-            
-            // Mobile Menu
-            elements.mobileMenuBtn.addEventListener('click', () => {
-                elements.tabsContainer.classList.toggle('active');
             });
             
             // Premium Upgrade
@@ -1554,6 +1645,7 @@
                 e.preventDefault();
                 showPaymentModal();
             });
+            elements.mobileUpgrade.addEventListener('click', showPaymentModal);
             elements.closeModal.addEventListener('click', hidePaymentModal);
             
             // Payment Handler
@@ -1584,22 +1676,11 @@
             });
         }
         
-        // Activate tab and scroll to top
-        function activateTab(tabId) {
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            // Hide all tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Add active class to clicked tab
-            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-            // Show the selected tab content
-            document.getElementById(`${tabId}-tab`).classList.add('active');
-            
-            // Scroll to top of the page
-            window.scrollTo(0, 0);
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            elements.mobileSidebar.classList.toggle('active');
+            elements.overlay.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
         }
         
         // Render UI based on state
@@ -1632,6 +1713,24 @@
             localStorage.setItem('lex_daily_plans', JSON.stringify(state.dailyPlans));
             localStorage.setItem('lex_tasks', JSON.stringify(state.tasks));
             localStorage.setItem('lex_resume_data', JSON.stringify(state.resumeData));
+        }
+        
+        // Activate tab
+        function activateTab(tabId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+            // Show the selected tab content
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            
+            // Scroll to top of the page
+            window.scrollTo(0, 0);
         }
         
         // Daily Planner Functions
@@ -1850,12 +1949,15 @@
             
             setTimeout(() => {
                 // Use html2canvas to capture the resume preview
-                html2canvas(elements.resumePreview).then(canvas => {
+                html2canvas(elements.resumePreview, {
+                    scale: 2, // Higher quality
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
                     
                     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                     pdf.save('lex-resume.pdf');
@@ -1865,6 +1967,11 @@
                     elements.generateResumeBtn.disabled = false;
                     
                     showToast('Resume downloaded as PDF', 'success');
+                }).catch(err => {
+                    console.error('Error generating PDF:', err);
+                    showToast('Error generating PDF', 'error');
+                    elements.generateResumeBtn.innerHTML = originalText;
+                    elements.generateResumeBtn.disabled = false;
                 });
             }, 1500);
         }
