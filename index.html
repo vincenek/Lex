@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lex - Professional Productivity Suite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         :root {
@@ -49,7 +50,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -103,6 +104,53 @@
         .premium-badge.locked {
             background: linear-gradient(45deg, #6c757d, #495057);
             color: white;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 18px 0;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab:hover {
+            background: #f0f2f5;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .dashboard {
@@ -261,11 +309,6 @@
             border-left: 4px solid var(--primary);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .task-item:hover {
             background: #eef2ff;
             transform: translateX(5px);
@@ -378,17 +421,6 @@
             font-style: italic;
         }
 
-        .support-dev a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .support-dev a:hover {
-            text-decoration: underline;
-        }
-
         .resume-preview {
             background: var(--surface-alt);
             border-radius: var(--radius);
@@ -417,6 +449,13 @@
             font-weight: 600;
         }
 
+        .resume-contact {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
         .resume-section {
             margin-bottom: 25px;
         }
@@ -427,6 +466,22 @@
             margin-bottom: 10px;
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
+        }
+
+        .resume-item {
+            margin-bottom: 15px;
+        }
+
+        .resume-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .resume-item-subheader {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 8px;
         }
 
         .modal {
@@ -690,6 +745,128 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: var(--radius);
+            padding: 15px;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: var(--transition);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item:hover {
+            background: #f8f9fa;
+        }
+
+        .history-date {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .history-content {
+            display: flex;
+            gap: 15px;
+        }
+
+        .history-focus {
+            flex: 1;
+            font-style: italic;
+        }
+
+        .history-tasks {
+            flex: 2;
+        }
+
+        .productivity-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 0;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-label {
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 30px;
+        }
+
+        .progress-section {
+            margin: 20px 0;
+        }
+
+        .progress-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #4cc9f0);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .streak-container {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .streak-day {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .streak-day.active {
+            background: var(--success);
+            color: white;
+        }
+
+        .streak-day.current {
+            background: var(--primary);
+            color: white;
+        }
+
+        .resume-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
     </style>
 </head>
 <body>
@@ -705,50 +882,280 @@
             </div>
         </header>
 
-        <div class="dashboard">
-            <!-- Daily Planner Section -->
-            <div class="card">
-                <div class="card-title">
-                    <h2><i class="fas fa-calendar-alt"></i> Daily Planner</h2>
-                </div>
-                <div class="form-group">
-                    <label for="dailyFocus"><i class="fas fa-bullseye"></i> Today's Focus</label>
-                    <input type="text" id="dailyFocus" placeholder="What's your main focus for today?">
-                </div>
-                <div class="form-group">
-                    <label for="dailyTasks"><i class="fas fa-tasks"></i> Key Tasks</label>
-                    <textarea id="dailyTasks" rows="4" placeholder="List your most important tasks..."></textarea>
-                </div>
-                <button id="saveDailyBtn" class="btn btn-block">
-                    <i class="fas fa-save"></i> Save Daily Plan
-                </button>
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">
+                <i class="fas fa-home"></i> Dashboard
             </div>
+            <div class="tab" data-tab="daily">
+                <i class="fas fa-calendar-day"></i> Daily Planner
+            </div>
+            <div class="tab" data-tab="tasks">
+                <i class="fas fa-tasks"></i> Task Manager
+            </div>
+            <div class="tab" data-tab="resume">
+                <i class="fas fa-file-alt"></i> Resume Builder
+            </div>
+        </div>
 
-            <!-- To-Do List Section -->
-            <div class="card">
-                <div class="card-title">
-                    <h2><i class="fas fa-list-check"></i> Task Manager</h2>
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-chart-line"></i> Productivity Score</h2>
+                    </div>
+                    <div class="productivity-score" id="productivityScore">84</div>
+                    <div class="score-label">Your current productivity score</div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-title">
+                            <span>Task Completion</span>
+                            <span>78%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-title">
+                            <span>Focus Time</span>
+                            <span>64%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 64%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="progress-title">
+                            <span>Goal Achievement</span>
+                            <span>92%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-title" style="margin-top: 30px;">
+                        <h2><i class="fas fa-fire"></i> Streak Tracker</h2>
+                    </div>
+                    
+                    <div class="streak-container">
+                        <div class="streak-day active">M</div>
+                        <div class="streak-day active">T</div>
+                        <div class="streak-day active">W</div>
+                        <div class="streak-day current">T</div>
+                        <div class="streak-day">F</div>
+                        <div class="streak-day">S</div>
+                        <div class="streak-day">S</div>
+                    </div>
+                    <p style="text-align: center; font-weight: 600; margin-top: 10px;">3-day streak! Keep going!</p>
                 </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" id="taskInput" placeholder="Add a new task...">
+                
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-bullseye"></i> Today's Focus</h2>
+                    </div>
+                    <div class="today-focus" id="todayFocus" style="font-size: 1.2rem; font-weight: 500; padding: 20px; background: #eef7ff; border-radius: var(--radius); margin-bottom: 20px;">
+                        Complete project proposal and prepare for client meeting
+                    </div>
+                    
+                    <div class="card-title">
+                        <h2><i class="fas fa-tasks"></i> Priority Tasks</h2>
+                    </div>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Finalize project proposal document</span>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Prepare presentation for client meeting</span>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check" checked>
+                            <span class="task-text">Review team progress reports</span>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Schedule next sprint planning</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="thank-you" id="thankYouMessage">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Thank You for Your Support!</h3>
+                        <p>Premium features have been unlocked. Enjoy your enhanced productivity experience.</p>
                     </div>
                 </div>
-                <button id="addTaskBtn" class="btn btn-block">
-                    <i class="fas fa-plus"></i> Add Task
-                </button>
+            </div>
+        </div>
+
+        <!-- Daily Planner Tab -->
+        <div class="tab-content" id="daily-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-calendar-day"></i> Today's Plan</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="dailyFocus"><i class="fas fa-bullseye"></i> Today's Focus</label>
+                        <input type="text" id="dailyFocus" placeholder="What's your main focus for today?">
+                    </div>
+                    <div class="form-group">
+                        <label for="dailyTasks"><i class="fas fa-tasks"></i> Key Tasks</label>
+                        <textarea id="dailyTasks" rows="6" placeholder="List your most important tasks..."></textarea>
+                    </div>
+                    <button id="saveDailyBtn" class="btn btn-block">
+                        <i class="fas fa-save"></i> Save Today's Plan
+                    </button>
+                </div>
                 
-                <ul id="taskList" class="task-list">
-                    <!-- Tasks will be added here dynamically -->
-                </ul>
-                
-                <div class="status-bar">
-                    <div><i class="fas fa-tasks"></i> Total tasks: <span id="taskCount">0</span></div>
-                    <div><i class="fas fa-lock"></i> Free limit: <span id="taskLimit" class="save-limit">5 tasks</span></div>
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-history"></i> Plan History</h2>
+                    </div>
+                    <div class="history-list">
+                        <div class="history-item">
+                            <div class="history-date">Wednesday, October 18</div>
+                            <div class="history-content">
+                                <div class="history-focus">Client meeting preparation</div>
+                                <div class="history-tasks">Project review, Presentation slides, Budget analysis</div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">Tuesday, October 17</div>
+                            <div class="history-content">
+                                <div class="history-focus">Team sprint planning</div>
+                                <div class="history-tasks">Define sprint goals, Assign tasks, Estimate timelines</div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">Monday, October 16</div>
+                            <div class="history-content">
+                                <div class="history-focus">Weekly planning</div>
+                                <div class="history-tasks">Set weekly goals, Schedule meetings, Review priorities</div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">Friday, October 13</div>
+                            <div class="history-content">
+                                <div class="history-focus">Project milestone review</div>
+                                <div class="history-tasks">Evaluate progress, Identify blockers, Update documentation</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Resume Builder (Premium) -->
+        <!-- Task Manager Tab -->
+        <div class="tab-content" id="tasks-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-plus-circle"></i> Add New Task</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskTitle"><i class="fas fa-heading"></i> Task Title</label>
+                        <input type="text" id="taskTitle" placeholder="What needs to be done?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskCategory"><i class="fas fa-tag"></i> Category</label>
+                        <select id="taskCategory">
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="health">Health & Fitness</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskDueDate"><i class="fas fa-calendar"></i> Due Date</label>
+                        <input type="date" id="taskDueDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskPriority"><i class="fas fa-flag"></i> Priority</label>
+                        <select id="taskPriority">
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <button id="addTaskBtn" class="btn btn-block">
+                        <i class="fas fa-plus"></i> Add Task
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <h2><i class="fas fa-list-check"></i> Your Tasks</h2>
+                    </div>
+                    
+                    <div class="task-filters" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn" style="padding: 8px 15px;">All</button>
+                        <button class="btn" style="padding: 8px 15px; background: #e9ecef; color: var(--dark);">Work</button>
+                        <button class="btn" style="padding: 8px 15px; background: #e9ecef; color: var(--dark);">Personal</button>
+                    </div>
+                    
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Complete project proposal document</span>
+                            <div class="task-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="task-item completed">
+                            <input type="checkbox" class="task-check" checked>
+                            <span class="task-text">Review team progress reports</span>
+                            <div class="task-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Prepare client presentation</span>
+                            <div class="task-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Schedule next sprint planning meeting</span>
+                            <div class="task-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-check">
+                            <span class="task-text">Research new design patterns</span>
+                            <div class="task-actions">
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="status-bar">
+                        <div><i class="fas fa-tasks"></i> Total tasks: <span id="taskCount">5</span></div>
+                        <div><i class="fas fa-lock"></i> Free limit: <span id="taskLimit" class="save-limit">5 tasks</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Builder Tab -->
+        <div class="tab-content" id="resume-tab">
             <div class="card premium-feature">
                 <div class="card-title">
                     <h2><i class="fas fa-file-contract"></i> Resume Builder</h2>
@@ -767,21 +1174,52 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="resumeName"><i class="fas fa-user"></i> Full Name</label>
-                    <input type="text" id="resumeName" placeholder="Your full name">
+                <div class="resume-form">
+                    <div class="form-group full-width">
+                        <label for="resumeName"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="resumeName" placeholder="Your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resumeTitle"><i class="fas fa-briefcase"></i> Professional Title</label>
+                        <input type="text" id="resumeTitle" placeholder="e.g., Software Engineer">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resumeEmail"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="resumeEmail" placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resumePhone"><i class="fas fa-phone"></i> Phone</label>
+                        <input type="tel" id="resumePhone" placeholder="(123) 456-7890">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resumeLocation"><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <input type="text" id="resumeLocation" placeholder="City, Country">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resumeWebsite"><i class="fas fa-globe"></i> Website/Portfolio</label>
+                        <input type="url" id="resumeWebsite" placeholder="https://yourportfolio.com">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="resumeSummary"><i class="fas fa-file-alt"></i> Professional Summary</label>
+                        <textarea id="resumeSummary" rows="4" placeholder="Briefly describe your professional background and key skills..."></textarea>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="resumeTitle"><i class="fas fa-briefcase"></i> Professional Title</label>
-                    <input type="text" id="resumeTitle" placeholder="e.g., Software Engineer">
+                <div class="card-title">
+                    <h2><i class="fas fa-file-pdf"></i> Export Options</h2>
                 </div>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
                         <i class="fas fa-paint-brush"></i>
-                        <h4>Professional Templates</h4>
-                        <p>10+ ATS-friendly designs</p>
+                        <h4>Professional Template</h4>
+                        <p>Modern and clean design</p>
                     </div>
                     <div class="feature-card locked-feature">
                         <i class="fas fa-file-pdf"></i>
@@ -803,43 +1241,47 @@
                 <button id="generateResumeBtn" class="btn btn-premium btn-block">
                     <i class="fas fa-magic"></i> Generate Professional Resume
                 </button>
-            </div>
-
-            <!-- Productivity Stats -->
-            <div class="card">
-                <div class="card-title">
-                    <h2><i class="fas fa-chart-line"></i> Your Progress</h2>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-check-circle"></i> Completed Tasks This Week</label>
-                    <div style="background: #e9ecef; height: 24px; border-radius: 12px; margin: 15px 0; overflow: hidden;">
-                        <div id="progressBar" style="background: linear-gradient(90deg, var(--success), #4cc9f0); width: 65%; height: 100%; border-radius: 12px; transition: width 0.5s ease;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 1rem;">
-                        <span>0</span>
-                        <span><span id="completedTasks">5</span>/8 tasks</span>
-                        <span>10</span>
-                    </div>
+                
+                <div class="card-title" style="margin-top: 30px;">
+                    <h2><i class="fas fa-eye"></i> Resume Preview</h2>
                 </div>
                 
-                <div class="form-group">
-                    <label><i class="fas fa-fire"></i> Productivity Streak</label>
-                    <div style="display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap;">
-                        <div class="streak-day active">M</div>
-                        <div class="streak-day active">T</div>
-                        <div class="streak-day active">W</div>
-                        <div class="streak-day current">T</div>
-                        <div class="streak-day">F</div>
-                        <div class="streak-day">S</div>
-                        <div class="streak-day">S</div>
+                <div class="resume-preview">
+                    <div class="resume-header">
+                        <div class="resume-name" id="previewName">John Doe</div>
+                        <div class="resume-title" id="previewTitle">Senior Software Engineer</div>
+                        <div class="resume-contact">
+                            <div id="previewEmail">john.doe@example.com</div>
+                            <div id="previewPhone">(123) 456-7890</div>
+                            <div id="previewLocation">San Francisco, CA</div>
+                        </div>
                     </div>
-                    <p style="text-align: center; font-size: 1.05rem; font-weight: 500;">3-day streak! Keep going!</p>
-                </div>
-                
-                <div class="thank-you" id="thankYouMessage">
-                    <i class="fas fa-check-circle"></i>
-                    <h3>Thank You for Your Support!</h3>
-                    <p>Premium features have been unlocked. Enjoy your enhanced productivity experience.</p>
+                    
+                    <div class="resume-section">
+                        <h3>Professional Summary</h3>
+                        <p id="previewSummary">Experienced software engineer with 8+ years of expertise in developing scalable web applications. Specialized in JavaScript frameworks and cloud technologies. Passionate about creating efficient, user-friendly solutions.</p>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h3>Work Experience</h3>
+                        <div class="resume-item">
+                            <div class="resume-item-header">
+                                <div>Senior Software Engineer</div>
+                                <div>2020 - Present</div>
+                            </div>
+                            <div class="resume-item-subheader">Tech Solutions Inc., San Francisco</div>
+                            <p>Lead development of enterprise SaaS platform serving 500+ clients globally. Implemented microservices architecture reducing latency by 40%.</p>
+                        </div>
+                        
+                        <div class="resume-item">
+                            <div class="resume-item-header">
+                                <div>Software Engineer</div>
+                                <div>2016 - 2020</div>
+                            </div>
+                            <div class="resume-item-subheader">Innovate Startup, Seattle</div>
+                            <p>Developed and launched mobile application reaching 100,000+ users. Implemented CI/CD pipeline reducing deployment time by 70%.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -897,319 +1339,205 @@
     </div>
 
     <script>
-        // Robust Application Structure
-        const LexApp = (() => {
-            // DOM Elements
-            const elements = {
-                premiumBadge: document.getElementById('premiumBadge'),
-                paymentModal: document.getElementById('paymentModal'),
-                closeModal: document.getElementById('closeModal'),
-                payButton: document.getElementById('payButton'),
-                unlockResumeBtn: document.getElementById('unlockResumeBtn'),
-                addTaskBtn: document.getElementById('addTaskBtn'),
-                taskInput: document.getElementById('taskInput'),
-                taskList: document.getElementById('taskList'),
-                taskCount: document.getElementById('taskCount'),
-                thankYouMessage: document.getElementById('thankYouMessage'),
-                saveDailyBtn: document.getElementById('saveDailyBtn'),
-                dailyFocus: document.getElementById('dailyFocus'),
-                dailyTasks: document.getElementById('dailyTasks'),
-                taskLimit: document.getElementById('taskLimit'),
-                generateResumeBtn: document.getElementById('generateResumeBtn'),
-                toast: document.getElementById('toast'),
-                toastMessage: document.getElementById('toastMessage'),
-                footerUpgrade: document.getElementById('footerUpgrade'),
-                email: document.getElementById('email'),
-                payButtonText: document.getElementById('payButtonText'),
-                progressBar: document.getElementById('progressBar'),
-                completedTasks: document.getElementById('completedTasks')
-            };
-            
-            // App State
-            let state = {
-                tasks: [],
-                isPremium: false,
-                MAX_FREE_TASKS: 5,
-                paymentProcessing: false
-            };
-            
-            // Initialize the application
-            function init() {
-                loadState();
-                setupEventListeners();
-                renderUI();
-                showToast('Welcome to Lex Productivity Suite!', 'success');
-            }
-            
-            // Load state from localStorage
-            function loadState() {
-                try {
-                    const savedTasks = localStorage.getItem('lex_tasks');
-                    state.tasks = savedTasks ? JSON.parse(savedTasks) : [];
-                    
-                    const premiumStatus = localStorage.getItem('lex_premium');
-                    state.isPremium = premiumStatus === 'true';
-                } catch (error) {
-                    showToast('Error loading saved data', 'error');
-                    console.error('State load error:', error);
-                }
-            }
-            
-            // Save state to localStorage
-            function saveState() {
-                try {
-                    localStorage.setItem('lex_tasks', JSON.stringify(state.tasks));
-                    localStorage.setItem('lex_premium', state.isPremium.toString());
-                } catch (error) {
-                    showToast('Error saving data', 'error');
-                    console.error('State save error:', error);
-                }
-            }
-            
-            // Set up event listeners
-            function setupEventListeners() {
-                elements.premiumBadge.addEventListener('click', showPaymentModal);
-                elements.closeModal.addEventListener('click', hidePaymentModal);
-                elements.payButton.addEventListener('click', handlePayment);
-                elements.unlockResumeBtn.addEventListener('click', showPaymentModal);
-                elements.addTaskBtn.addEventListener('click', addTask);
-                elements.taskInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') addTask();
-                });
-                elements.saveDailyBtn.addEventListener('click', saveDailyPlan);
-                elements.footerUpgrade.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPaymentModal();
+        // Tab Switching Functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
                 });
                 
-                // Close modal when clicking outside
-                window.addEventListener('click', (e) => {
-                    if (e.target === elements.paymentModal) {
-                        hidePaymentModal();
-                    }
-                });
-            }
-            
-            // Render UI based on state
-            function renderUI() {
-                renderTasks();
-                updateTaskCounter();
-                updatePremiumUI();
-                loadDailyPlan();
-            }
-            
-            // Update UI based on premium status
-            function updatePremiumUI() {
-                if (state.isPremium) {
-                    elements.premiumBadge.innerHTML = '<i class="fas fa-crown"></i> Premium Activated';
-                    elements.premiumBadge.classList.remove('locked');
-                    document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');
-                    document.querySelectorAll('.locked-feature').forEach(el => el.classList.remove('locked-feature'));
-                    elements.thankYouMessage.style.display = 'block';
-                } else {
-                    elements.premiumBadge.innerHTML = '<i class="fas fa-crown"></i> Upgrade to Premium';
-                    elements.premiumBadge.classList.add('locked');
-                    elements.thankYouMessage.style.display = 'none';
-                }
-            }
-            
-            // Render tasks to the list
-            function renderTasks() {
-                elements.taskList.innerHTML = '';
-                
-                if (state.tasks.length === 0) {
-                    elements.taskList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #adb5bd; margin: 20px 0;"></i>
-                            <p>No tasks yet. Add your first task to get started!</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                state.tasks.forEach((task, index) => {
-                    const taskItem = document.createElement('li');
-                    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
-                    taskItem.innerHTML = `
-                        <input type="checkbox" class="task-check" ${task.completed ? 'checked' : ''} data-index="${index}">
-                        <span class="task-text">${task.text}</span>
-                        <div class="task-actions">
-                            <button class="delete-task" data-index="${index}"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                    elements.taskList.appendChild(taskItem);
-                });
-                
-                // Add event listeners to new elements
-                document.querySelectorAll('.task-check').forEach(checkbox => {
-                    checkbox.addEventListener('change', toggleTaskComplete);
-                });
-                
-                document.querySelectorAll('.delete-task').forEach(button => {
-                    button.addEventListener('click', deleteTask);
-                });
-            }
-            
-            // Add new task
-            function addTask() {
-                const text = elements.taskInput.value.trim();
-                if (!text) {
-                    showToast('Please enter a task', 'error');
-                    return;
-                }
-                
-                if (!state.isPremium && state.tasks.length >= state.MAX_FREE_TASKS) {
-                    showToast(`Free version limited to ${state.MAX_FREE_TASKS} tasks. Upgrade to Premium.`, 'error');
-                    elements.taskInput.value = '';
-                    return;
-                }
-                
-                state.tasks.push({ text, completed: false });
-                saveState();
-                elements.taskInput.value = '';
-                renderUI();
-                showToast('Task added successfully', 'success');
-            }
-            
-            // Toggle task completion
-            function toggleTaskComplete(e) {
-                const index = parseInt(e.target.dataset.index);
-                state.tasks[index].completed = !state.tasks[index].completed;
-                saveState();
-                renderUI();
-                
-                if (state.tasks[index].completed) {
-                    showToast('Task marked as complete!', 'success');
-                }
-            }
-            
-            // Delete task
-            function deleteTask(e) {
-                const index = parseInt(e.target.closest('.delete-task').dataset.index);
-                state.tasks.splice(index, 1);
-                saveState();
-                renderUI();
-                showToast('Task removed', 'success');
-            }
-            
-            // Update task counter
-            function updateTaskCounter() {
-                elements.taskCount.textContent = state.tasks.length;
-                if (!state.isPremium) {
-                    elements.taskLimit.textContent = `${state.MAX_FREE_TASKS} tasks`;
-                    elements.taskLimit.style.display = 'inline';
-                } else {
-                    elements.taskLimit.style.display = 'none';
-                }
-            }
-            
-            // Save daily plan
-            function saveDailyPlan() {
-                const plan = {
-                    focus: elements.dailyFocus.value,
-                    tasks: elements.dailyTasks.value
-                };
-                
-                try {
-                    localStorage.setItem('lex_daily_plan', JSON.stringify(plan));
-                    showToast('Daily plan saved successfully!', 'success');
-                } catch (error) {
-                    showToast('Error saving daily plan', 'error');
-                    console.error('Daily plan save error:', error);
-                }
-            }
-            
-            // Load daily plan
-            function loadDailyPlan() {
-                try {
-                    const plan = JSON.parse(localStorage.getItem('lex_daily_plan'));
-                    if (plan) {
-                        elements.dailyFocus.value = plan.focus || '';
-                        elements.dailyTasks.value = plan.tasks || '';
-                    }
-                } catch (error) {
-                    console.error('Daily plan load error:', error);
-                }
-            }
-            
-            // Show payment modal
-            function showPaymentModal() {
-                elements.paymentModal.style.display = 'flex';
-                elements.email.value = '';
-            }
-            
-            // Hide payment modal
-            function hidePaymentModal() {
-                elements.paymentModal.style.display = 'none';
-            }
-            
-            // Payment handler using Paystack
-            function handlePayment() {
-                if (state.paymentProcessing) return;
-                
-                const email = elements.email.value.trim();
-                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-                    showToast('Please enter a valid email address', 'error');
-                    return;
-                }
-                
-                state.paymentProcessing = true;
-                elements.payButtonText.innerHTML = '<span class="loading"></span> Processing Payment';
-                elements.payButton.disabled = true;
-                
-                // Payment simulation for demo
-                setTimeout(() => {
-                    // In a real app, this would be replaced with actual Paystack integration
-                    state.isPremium = true;
-                    saveState();
-                    renderUI();
-                    hidePaymentModal();
-                    showToast('Premium features unlocked! Thank you!', 'success');
-                    
-                    // Reset payment button
-                    state.paymentProcessing = false;
-                    elements.payButtonText.innerHTML = '<i class="fas fa-lock"></i> Unlock Premium for $14.99';
-                    elements.payButton.disabled = false;
-                }, 2000);
-            }
-            
-            // Show toast message
-            function showToast(message, type = 'success') {
-                elements.toastMessage.textContent = message;
-                elements.toast.className = `toast ${type}`;
-                elements.toast.classList.add('show');
-                
-                setTimeout(() => {
-                    elements.toast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // Public API
-            return {
-                init
-            };
-        })();
+                // Show the selected tab content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            LexApp.init();
+        // Premium Upgrade Functionality
+        document.getElementById('premiumBadge').addEventListener('click', showPaymentModal);
+        document.getElementById('unlockResumeBtn').addEventListener('click', showPaymentModal);
+        document.getElementById('footerUpgrade').addEventListener('click', (e) => {
+            e.preventDefault();
+            showPaymentModal();
+        });
+        document.getElementById('closeModal').addEventListener('click', hidePaymentModal);
+        
+        function showPaymentModal() {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        
+        function hidePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+        
+        // Payment Handler
+        document.getElementById('payButton').addEventListener('click', handlePayment);
+        
+        function handlePayment() {
+            const email = document.getElementById('email').value.trim();
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
             
-            // Add sample tasks for demo
+            // Simulate payment processing
+            const payButtonText = document.getElementById('payButtonText');
+            payButtonText.innerHTML = '<span class="loading"></span> Processing Payment';
+            
             setTimeout(() => {
-                const tasks = [
-                    "Complete project proposal",
-                    "Call with design team",
-                    "Review quarterly reports",
-                    "Schedule team meeting",
-                    "Research new technologies"
-                ];
+                // Unlock premium features
+                document.getElementById('premiumBadge').classList.remove('locked');
+                document.getElementById('premiumBadge').innerHTML = '<i class="fas fa-crown"></i> Premium Activated';
+                document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.locked-feature').forEach(el => el.classList.remove('locked-feature'));
+                document.getElementById('thankYouMessage').style.display = 'block';
                 
-                tasks.forEach(task => {
-                    const event = new KeyboardEvent('keypress', { key: 'Enter' });
-                    document.getElementById('taskInput').value = task;
-                    document.getElementById('addTaskBtn').dispatchEvent(new Event('click'));
-                });
-            }, 500);
+                // Hide modal and show toast
+                hidePaymentModal();
+                showToast('Premium features unlocked! Thank you!', 'success');
+                
+                // Reset payment button
+                payButtonText.innerHTML = '<i class="fas fa-lock"></i> Unlock Premium for $14.99';
+            }, 2000);
+        }
+        
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Resume Builder Live Preview
+        const resumeFields = ['resumeName', 'resumeTitle', 'resumeEmail', 'resumePhone', 'resumeLocation', 'resumeSummary'];
+        resumeFields.forEach(field => {
+            document.getElementById(field).addEventListener('input', updateResumePreview);
+        });
+        
+        function updateResumePreview() {
+            document.getElementById('previewName').textContent = document.getElementById('resumeName').value || 'John Doe';
+            document.getElementById('previewTitle').textContent = document.getElementById('resumeTitle').value || 'Senior Software Engineer';
+            document.getElementById('previewEmail').textContent = document.getElementById('resumeEmail').value || 'john.doe@example.com';
+            document.getElementById('previewPhone').textContent = document.getElementById('resumePhone').value || '(123) 456-7890';
+            document.getElementById('previewLocation').textContent = document.getElementById('resumeLocation').value || 'San Francisco, CA';
+            document.getElementById('previewSummary').textContent = document.getElementById('resumeSummary').value || 
+                'Experienced software engineer with 8+ years of expertise in developing scalable web applications. Specialized in JavaScript frameworks and cloud technologies. Passionate about creating efficient, user-friendly solutions.';
+        }
+        
+        // Generate Resume Functionality
+        document.getElementById('generateResumeBtn').addEventListener('click', () => {
+            if (document.getElementById('premiumBadge').classList.contains('locked')) {
+                showToast('Please upgrade to Premium to generate your resume', 'error');
+                return;
+            }
+            
+            // Simulate resume generation
+            const button = document.getElementById('generateResumeBtn');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="loading"></span> Generating Resume...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showToast('Resume generated successfully!', 'success');
+                
+                // Simulate PDF download
+                setTimeout(() => {
+                    showToast('Resume downloaded as PDF', 'success');
+                }, 1000);
+            }, 2000);
+        });
+        
+        // Daily Plan Saving
+        document.getElementById('saveDailyBtn').addEventListener('click', () => {
+            const focus = document.getElementById('dailyFocus').value;
+            const tasks = document.getElementById('dailyTasks').value;
+            
+            if (!focus || !tasks) {
+                showToast('Please enter both focus and tasks', 'error');
+                return;
+            }
+            
+            // Simulate saving
+            const button = document.getElementById('saveDailyBtn');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="loading"></span> Saving...';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                showToast('Daily plan saved successfully!', 'success');
+                
+                // Add to history
+                const historyList = document.querySelector('.history-list');
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-date">${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                    <div class="history-content">
+                        <div class="history-focus">${focus}</div>
+                        <div class="history-tasks">${tasks.split('\n').join(', ')}</div>
+                    </div>
+                `;
+                historyList.insertBefore(historyItem, historyList.firstChild);
+            }, 1000);
+        });
+        
+        // Task Management
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+            const title = document.getElementById('taskTitle').value;
+            const category = document.getElementById('taskCategory').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            const priority = document.getElementById('taskPriority').value;
+            
+            if (!title) {
+                showToast('Please enter a task title', 'error');
+                return;
+            }
+            
+            // Create new task
+            const taskList = document.querySelector('#tasks-tab .task-list');
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task-item';
+            taskItem.innerHTML = `
+                <input type="checkbox" class="task-check">
+                <span class="task-text">${title}</span>
+                <div class="task-actions">
+                    <button><i class="fas fa-edit"></i></button>
+                    <button><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            taskList.appendChild(taskItem);
+            
+            // Update task count
+            const taskCount = document.getElementById('taskCount');
+            taskCount.textContent = parseInt(taskCount.textContent) + 1;
+            
+            // Show success message
+            showToast('Task added successfully!', 'success');
+            
+            // Clear form
+            document.getElementById('taskTitle').value = '';
+        });
+        
+        // Initialize with some data
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('dailyFocus').value = 'Complete project proposal and prepare for client meeting';
+            document.getElementById('dailyTasks').value = '1. Finalize proposal document\n2. Prepare presentation slides\n3. Review budget estimates\n4. Schedule team sync';
+            
+            updateResumePreview();
         });
     </script>
 </body>
