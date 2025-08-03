@@ -905,4 +905,312 @@
                 paymentModal: document.getElementById('paymentModal'),
                 closeModal: document.getElementById('closeModal'),
                 payButton: document.getElementById('payButton'),
-                unlockResumeBtn
+                unlockResumeBtn: document.getElementById('unlockResumeBtn'),
+                addTaskBtn: document.getElementById('addTaskBtn'),
+                taskInput: document.getElementById('taskInput'),
+                taskList: document.getElementById('taskList'),
+                taskCount: document.getElementById('taskCount'),
+                thankYouMessage: document.getElementById('thankYouMessage'),
+                saveDailyBtn: document.getElementById('saveDailyBtn'),
+                dailyFocus: document.getElementById('dailyFocus'),
+                dailyTasks: document.getElementById('dailyTasks'),
+                taskLimit: document.getElementById('taskLimit'),
+                generateResumeBtn: document.getElementById('generateResumeBtn'),
+                toast: document.getElementById('toast'),
+                toastMessage: document.getElementById('toastMessage'),
+                footerUpgrade: document.getElementById('footerUpgrade'),
+                email: document.getElementById('email'),
+                payButtonText: document.getElementById('payButtonText'),
+                progressBar: document.getElementById('progressBar'),
+                completedTasks: document.getElementById('completedTasks')
+            };
+            
+            // App State
+            let state = {
+                tasks: [],
+                isPremium: false,
+                MAX_FREE_TASKS: 5,
+                paymentProcessing: false
+            };
+            
+            // Initialize the application
+            function init() {
+                loadState();
+                setupEventListeners();
+                renderUI();
+                showToast('Welcome to Lex Productivity Suite!', 'success');
+            }
+            
+            // Load state from localStorage
+            function loadState() {
+                try {
+                    const savedTasks = localStorage.getItem('lex_tasks');
+                    state.tasks = savedTasks ? JSON.parse(savedTasks) : [];
+                    
+                    const premiumStatus = localStorage.getItem('lex_premium');
+                    state.isPremium = premiumStatus === 'true';
+                } catch (error) {
+                    showToast('Error loading saved data', 'error');
+                    console.error('State load error:', error);
+                }
+            }
+            
+            // Save state to localStorage
+            function saveState() {
+                try {
+                    localStorage.setItem('lex_tasks', JSON.stringify(state.tasks));
+                    localStorage.setItem('lex_premium', state.isPremium.toString());
+                } catch (error) {
+                    showToast('Error saving data', 'error');
+                    console.error('State save error:', error);
+                }
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                elements.premiumBadge.addEventListener('click', showPaymentModal);
+                elements.closeModal.addEventListener('click', hidePaymentModal);
+                elements.payButton.addEventListener('click', handlePayment);
+                elements.unlockResumeBtn.addEventListener('click', showPaymentModal);
+                elements.addTaskBtn.addEventListener('click', addTask);
+                elements.taskInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') addTask();
+                });
+                elements.saveDailyBtn.addEventListener('click', saveDailyPlan);
+                elements.footerUpgrade.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPaymentModal();
+                });
+                
+                // Close modal when clicking outside
+                window.addEventListener('click', (e) => {
+                    if (e.target === elements.paymentModal) {
+                        hidePaymentModal();
+                    }
+                });
+            }
+            
+            // Render UI based on state
+            function renderUI() {
+                renderTasks();
+                updateTaskCounter();
+                updatePremiumUI();
+                loadDailyPlan();
+            }
+            
+            // Update UI based on premium status
+            function updatePremiumUI() {
+                if (state.isPremium) {
+                    elements.premiumBadge.innerHTML = '<i class="fas fa-crown"></i> Premium Activated';
+                    elements.premiumBadge.classList.remove('locked');
+                    document.querySelectorAll('.premium-overlay').forEach(el => el.style.display = 'none');
+                    document.querySelectorAll('.locked-feature').forEach(el => el.classList.remove('locked-feature'));
+                    elements.thankYouMessage.style.display = 'block';
+                } else {
+                    elements.premiumBadge.innerHTML = '<i class="fas fa-crown"></i> Upgrade to Premium';
+                    elements.premiumBadge.classList.add('locked');
+                    elements.thankYouMessage.style.display = 'none';
+                }
+            }
+            
+            // Render tasks to the list
+            function renderTasks() {
+                elements.taskList.innerHTML = '';
+                
+                if (state.tasks.length === 0) {
+                    elements.taskList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #adb5bd; margin: 20px 0;"></i>
+                            <p>No tasks yet. Add your first task to get started!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                state.tasks.forEach((task, index) => {
+                    const taskItem = document.createElement('li');
+                    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    taskItem.innerHTML = `
+                        <input type="checkbox" class="task-check" ${task.completed ? 'checked' : ''} data-index="${index}">
+                        <span class="task-text">${task.text}</span>
+                        <div class="task-actions">
+                            <button class="delete-task" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    elements.taskList.appendChild(taskItem);
+                });
+                
+                // Add event listeners to new elements
+                document.querySelectorAll('.task-check').forEach(checkbox => {
+                    checkbox.addEventListener('change', toggleTaskComplete);
+                });
+                
+                document.querySelectorAll('.delete-task').forEach(button => {
+                    button.addEventListener('click', deleteTask);
+                });
+            }
+            
+            // Add new task
+            function addTask() {
+                const text = elements.taskInput.value.trim();
+                if (!text) {
+                    showToast('Please enter a task', 'error');
+                    return;
+                }
+                
+                if (!state.isPremium && state.tasks.length >= state.MAX_FREE_TASKS) {
+                    showToast(`Free version limited to ${state.MAX_FREE_TASKS} tasks. Upgrade to Premium.`, 'error');
+                    elements.taskInput.value = '';
+                    return;
+                }
+                
+                state.tasks.push({ text, completed: false });
+                saveState();
+                elements.taskInput.value = '';
+                renderUI();
+                showToast('Task added successfully', 'success');
+            }
+            
+            // Toggle task completion
+            function toggleTaskComplete(e) {
+                const index = parseInt(e.target.dataset.index);
+                state.tasks[index].completed = !state.tasks[index].completed;
+                saveState();
+                renderUI();
+                
+                if (state.tasks[index].completed) {
+                    showToast('Task marked as complete!', 'success');
+                }
+            }
+            
+            // Delete task
+            function deleteTask(e) {
+                const index = parseInt(e.target.closest('.delete-task').dataset.index);
+                state.tasks.splice(index, 1);
+                saveState();
+                renderUI();
+                showToast('Task removed', 'success');
+            }
+            
+            // Update task counter
+            function updateTaskCounter() {
+                elements.taskCount.textContent = state.tasks.length;
+                if (!state.isPremium) {
+                    elements.taskLimit.textContent = `${state.MAX_FREE_TASKS} tasks`;
+                    elements.taskLimit.style.display = 'inline';
+                } else {
+                    elements.taskLimit.style.display = 'none';
+                }
+            }
+            
+            // Save daily plan
+            function saveDailyPlan() {
+                const plan = {
+                    focus: elements.dailyFocus.value,
+                    tasks: elements.dailyTasks.value
+                };
+                
+                try {
+                    localStorage.setItem('lex_daily_plan', JSON.stringify(plan));
+                    showToast('Daily plan saved successfully!', 'success');
+                } catch (error) {
+                    showToast('Error saving daily plan', 'error');
+                    console.error('Daily plan save error:', error);
+                }
+            }
+            
+            // Load daily plan
+            function loadDailyPlan() {
+                try {
+                    const plan = JSON.parse(localStorage.getItem('lex_daily_plan'));
+                    if (plan) {
+                        elements.dailyFocus.value = plan.focus || '';
+                        elements.dailyTasks.value = plan.tasks || '';
+                    }
+                } catch (error) {
+                    console.error('Daily plan load error:', error);
+                }
+            }
+            
+            // Show payment modal
+            function showPaymentModal() {
+                elements.paymentModal.style.display = 'flex';
+                elements.email.value = '';
+            }
+            
+            // Hide payment modal
+            function hidePaymentModal() {
+                elements.paymentModal.style.display = 'none';
+            }
+            
+            // Payment handler using Paystack
+            function handlePayment() {
+                if (state.paymentProcessing) return;
+                
+                const email = elements.email.value.trim();
+                if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                    showToast('Please enter a valid email address', 'error');
+                    return;
+                }
+                
+                state.paymentProcessing = true;
+                elements.payButtonText.innerHTML = '<span class="loading"></span> Processing Payment';
+                elements.payButton.disabled = true;
+                
+                // Payment simulation for demo
+                setTimeout(() => {
+                    // In a real app, this would be replaced with actual Paystack integration
+                    state.isPremium = true;
+                    saveState();
+                    renderUI();
+                    hidePaymentModal();
+                    showToast('Premium features unlocked! Thank you!', 'success');
+                    
+                    // Reset payment button
+                    state.paymentProcessing = false;
+                    elements.payButtonText.innerHTML = '<i class="fas fa-lock"></i> Unlock Premium for $14.99';
+                    elements.payButton.disabled = false;
+                }, 2000);
+            }
+            
+            // Show toast message
+            function showToast(message, type = 'success') {
+                elements.toastMessage.textContent = message;
+                elements.toast.className = `toast ${type}`;
+                elements.toast.classList.add('show');
+                
+                setTimeout(() => {
+                    elements.toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Public API
+            return {
+                init
+            };
+        })();
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            LexApp.init();
+            
+            // Add sample tasks for demo
+            setTimeout(() => {
+                const tasks = [
+                    "Complete project proposal",
+                    "Call with design team",
+                    "Review quarterly reports",
+                    "Schedule team meeting",
+                    "Research new technologies"
+                ];
+                
+                tasks.forEach(task => {
+                    const event = new KeyboardEvent('keypress', { key: 'Enter' });
+                    document.getElementById('taskInput').value = task;
+                    document.getElementById('addTaskBtn').dispatchEvent(new Event('click'));
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
