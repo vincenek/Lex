@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -1426,9 +1425,6 @@
     </div>
 
     <script>
-        // Initialize jsPDF
-        const { jsPDF } = window.jspdf;
-        
         // App State
         let state = {
             isPremium: localStorage.getItem('lex_premium') === 'true',
@@ -1509,6 +1505,8 @@
             setupEventListeners();
             renderUI();
             updatePremiumUI();
+            updateResumeFields();
+            updateResumePreview();
             
             // Initialize with sample data if empty
             if (state.dailyPlans.length === 0) {
@@ -1539,10 +1537,6 @@
             // Set today's date as default for due date
             const today = new Date().toISOString().split('T')[0];
             elements.taskDueDate.value = today;
-            
-            // Initialize resume data
-            updateResumeFields();
-            updateResumePreview();
         }
         
         // Set up event listeners
